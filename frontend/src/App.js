@@ -6,6 +6,7 @@ function App() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tasks, setTasks] = useState([]);
+  const [editId, setEditId] = useState(null);
 
   const fetchTasks = async () => {
     try {
@@ -40,6 +41,27 @@ function App() {
     }
   };
 
+  const updateTask = async () => {
+    try {
+      await axios.put(`http://localhost:8080/tasks/${editId}`, {
+        title,
+        description,
+        status: "Pending"
+      });
+
+      alert("Task Updated Successfully!");
+
+      setTitle("");
+      setDescription("");
+      setEditId(null);
+
+      fetchTasks();
+    } catch (error) {
+      console.error(error);
+      alert("Error updating task");
+    }
+  };
+
   const deleteTask = async (id) => {
     try {
       await axios.delete(`http://localhost:8080/tasks/${id}`);
@@ -54,7 +76,7 @@ function App() {
     <div style={{ padding: "20px" }}>
       <h1>📋 Task Tracker</h1>
 
-      <h2>Add Task</h2>
+      <h2>{editId ? "Edit Task" : "Add Task"}</h2>
 
       <input
         type="text"
@@ -74,7 +96,9 @@ function App() {
 
       <br /><br />
 
-      <button onClick={addTask}>Add Task</button>
+      <button onClick={editId ? updateTask : addTask}>
+        {editId ? "Update Task" : "Add Task"}
+      </button>
 
       <h2>Task List</h2>
 
@@ -88,6 +112,17 @@ function App() {
               style={{ marginLeft: "10px" }}
             >
               Delete
+            </button>
+
+            <button
+              onClick={() => {
+                setEditId(task.id);
+                setTitle(task.title);
+                setDescription(task.description);
+              }}
+              style={{ marginLeft: "10px" }}
+            >
+              Edit
             </button>
           </li>
         ))}
