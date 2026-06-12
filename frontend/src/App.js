@@ -40,6 +40,16 @@ function App() {
     }
   };
 
+  const deleteTask = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8080/tasks/${id}`);
+      fetchTasks();
+    } catch (error) {
+      console.error(error);
+      alert("Error deleting task");
+    }
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h1>📋 Task Tracker</h1>
@@ -72,6 +82,13 @@ function App() {
         {tasks.map((task) => (
           <li key={task.id}>
             {task.title} - {task.description} - {task.status}
+
+            <button
+              onClick={() => deleteTask(task.id)}
+              style={{ marginLeft: "10px" }}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
