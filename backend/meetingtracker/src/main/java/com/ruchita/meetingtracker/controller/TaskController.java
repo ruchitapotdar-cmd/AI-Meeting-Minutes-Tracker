@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import com.ruchita.meetingtracker.entity.Task;
 import com.ruchita.meetingtracker.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
